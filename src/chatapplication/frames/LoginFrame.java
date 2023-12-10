@@ -6,7 +6,7 @@
 package chatapplication.frames;
 
 import chatapplication.database_connection.DatabaseManager;
-import chatapplication.main.Frame;
+import chatapplication.main.Client;
 import com.mysql.jdbc.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -14,7 +14,6 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.event.InternalFrameEvent;
 import javax.swing.event.InternalFrameListener;
@@ -26,13 +25,13 @@ import javax.swing.event.InternalFrameListener;
 public class LoginFrame extends javax.swing.JInternalFrame implements InternalFrameListener{
 
     private DatabaseManager database;
-    private Frame main;
+    private Client main;
     
     /**
      * Creates new form LoginFrame
      */
     
-    public LoginFrame(DatabaseManager database, Frame main) {
+    public LoginFrame(DatabaseManager database, Client main) {
         this.database = database; 
         this.main = main;
         addInternalFrameListener(this);
@@ -202,6 +201,7 @@ public class LoginFrame extends javax.swing.JInternalFrame implements InternalFr
 
         return false;
     }
+    
 
     public void setErrorText(String text) {
         this.error.setText(text);

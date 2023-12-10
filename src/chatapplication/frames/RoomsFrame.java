@@ -6,18 +6,18 @@
 package chatapplication.frames;
 
 import chatapplication.database_connection.DatabaseManager;
-import chatapplication.main.Frame;
+import chatapplication.main.Client;
+import chatapplication.rooms.Room;
 import chatapplication.rooms.RoomManager;
 import com.mysql.jdbc.PreparedStatement;
-import static com.sun.java.accessibility.util.AWTEventMonitor.addWindowListener;
-import java.awt.event.WindowAdapter;
-import java.awt.event.WindowEvent;
+
+import java.awt.Dimension;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.DefaultListModel;
 import javax.swing.JDesktopPane;
-import javax.swing.JPanel;
 
 /**
  *
@@ -27,14 +27,14 @@ public class RoomsFrame extends javax.swing.JInternalFrame {
 
     private RoomManager roomManager;
     private JDesktopPane desktop;
-    private Frame manager;
+    private AddNewRoom addroom;
+    private Client manager;
     private DatabaseManager database;
     private RoomFrame roomFrame;
+    private DefaultListModel cbb = new DefaultListModel();
 
-    /**
-     * Creates new form RoomsFrame
-     */
-    public RoomsFrame(JDesktopPane desktop, Frame manager) {
+    
+    public RoomsFrame(JDesktopPane desktop, Client manager) {
         this.manager = manager;
         database = manager.Database();
         this.desktop = desktop;
@@ -49,14 +49,27 @@ public class RoomsFrame extends javax.swing.JInternalFrame {
     }
 
     public DefaultListModel createRoomList() {
-        DefaultListModel model = new DefaultListModel();
-        for (int i = 1; i < 6; i++) {
-            model.addElement("room " + i);
+        //model = new DefaultListModel<>();
+        cbb = new DefaultListModel();
+        try {
+            int i=0;
+            PreparedStatement id = (PreparedStatement) database.connection.prepareStatement("select * from rooms inner join room_users on rooms.id = room_users.id_room where room_users.id_user = " +  database.user.getId());
+            try {
+                ResultSet rs = id.executeQuery();
+                while (rs.next()){
+                    //Map.of("id", rs.getInt("id"), "name", rs.getString("room_name"));
+                    cbb.addElement(rs.getString(2));
+                    roomManager.addRoom(i, rs.getInt(1), rs.getString(2));
+                    i++;
+                }
+            } catch (SQLException ex) {
+                Logger.getLogger(RoomsFrame.class.getName()).log(Level.SEVERE, null, ex);
+            }
+
+        } catch (SQLException ex) {
+            Logger.getLogger(RoomsFrame.class.getName()).log(Level.SEVERE, null, ex);
         }
-        for (int i = 1; i < 6; i++) {
-            roomManager.addRoom("room " + i);
-        }
-        return model;
+        return cbb;
     }
 
     /**e
@@ -70,11 +83,12 @@ public class RoomsFrame extends javax.swing.JInternalFrame {
 
         jScrollPane1 = new javax.swing.JScrollPane();
         rooms = new javax.swing.JList<>();
+        jButton1 = new javax.swing.JButton();
 
         setClosable(true);
 
         rooms.setModel(new javax.swing.AbstractListModel<String>() {
-            String[] strings = { "Item 1", "Item 2", "Item 3", "Item 4", "Item 5" };
+            String[] strings = { "Item 1", "Item 2", "Item 3", "Item 4", "Item 5", "Item 6", "Item 7", "Item 8", "Item 9" };
             public int getSize() { return strings.length; }
             public String getElementAt(int i) { return strings[i]; }
         });
@@ -90,78 +104,92 @@ public class RoomsFrame extends javax.swing.JInternalFrame {
         });
         jScrollPane1.setViewportView(rooms);
 
+        jButton1.setText("ADD NEW ROOM");
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
-                layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                        .addComponent(jScrollPane1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 288, Short.MAX_VALUE)
+            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(jScrollPane1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 288, Short.MAX_VALUE)
+            .addGroup(layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jButton1)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
-                layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                        .addGroup(layout.createSequentialGroup()
-                                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(0, 0, Short.MAX_VALUE))
+            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(layout.createSequentialGroup()
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jButton1)
+                .addGap(0, 24, Short.MAX_VALUE))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
     private void roomsMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_roomsMouseClicked
-        String room = rooms.getSelectedValue();
-        if (room != null) {
-            try {
-                PreparedStatement ids = database.Select(null, "room_users");
-                ResultSet id = ids.executeQuery();
-                int actualId = 0;
-                while (id.next()) {
-                    actualId = Integer.parseInt(id.getString("id"));
-                }
-                actualId++;
-                System.out.println("actual ID" + (actualId));
-                PreparedStatement st = (PreparedStatement) database.connection.prepareStatement("INSERT INTO room_users (id, user, room) VALUES (" + actualId + ", '" + database.user.getUsername() + "', '" + room + "')");
-                System.out.println(st.executeUpdate());
-            } catch (Exception ex) {
-                Logger.getLogger(RoomsFrame.class.getName()).log(Level.SEVERE, null, ex);
-            }
-
+        int selectRoom = rooms.getSelectedIndex();
+        //JOptionPane.showMessageDialog(this,room);
+        if (selectRoom>=0) {
             if (roomFrame != null) {
                 if (!roomFrame.isVisible()) {
-                    roomFrame = new RoomFrame(roomManager.getRoomByName(room), manager.Database(), manager.getClient());
+                    roomFrame = new RoomFrame(roomManager.getRoomBySlt(selectRoom), manager.Database(), manager.getClient(), desktop);
                     try {
-                        room = rooms.getSelectedValue();
-                        System.out.println(room);
-                        manager.getClient().userAdded("roomadd", manager.Database().user.getUsername(), room);
+                        Room room = roomManager.getRoomBySlt(selectRoom);
+                        String nameRoom = room.getRoom();
+                        System.out.println(nameRoom);
+                        //manager.getClient().userAdded("roomadd", manager.Database().user.getUsername(), room);
                     } catch (Exception ex) {
                         Logger.getLogger(RoomsFrame.class.getName()).log(Level.SEVERE, null, ex);
                     }
+                    Dimension sourceSize = this.desktop.getSize();
+                    roomFrame.setSize(sourceSize);
                     roomFrame.setVisible(true);
                     desktop.add(roomFrame);
                     setVisible(false);
                 }
             } else {
-                roomFrame = new RoomFrame(roomManager.getRoomByName(room), manager.Database(), manager.getClient());
+                roomFrame = new RoomFrame(roomManager.getRoomBySlt(selectRoom), manager.Database(), manager.getClient(), desktop);
                 try {
-                    room = rooms.getSelectedValue();
-                    System.out.println(room);
-                    manager.getClient().userAdded("roomadd", manager.Database().user.getUsername(), room);
+                        Room room = roomManager.getRoomBySlt(selectRoom);
+                        String nameRoom = room.getRoom();
+                        System.out.println(nameRoom);
+                    //manager.getClient().userAdded("roomadd", manager.Database().user.getUsername(), room);
                 } catch (Exception ex) {
                     Logger.getLogger(RoomsFrame.class.getName()).log(Level.SEVERE, null, ex);
                 }
+                Dimension sourceSize = this.desktop.getSize();
+                roomFrame.setSize(sourceSize);
                 roomFrame.setVisible(true);
                 desktop.add(roomFrame);
                 setVisible(false);
             }
         }
-
     }//GEN-LAST:event_roomsMouseClicked
 
     private void roomsMouseMoved(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_roomsMouseMoved
     }//GEN-LAST:event_roomsMouseMoved
+
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+// TODO add your handling code here:
+        
+        addroom = new AddNewRoom(database, 0); 
+        addroom.setVisible(true);
+        desktop.add(addroom);
+        setVisible(false);
+    }//GEN-LAST:event_jButton1ActionPerformed
     public RoomFrame getRoom() {
         return roomFrame;
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton jButton1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JList<String> rooms;
     // End of variables declaration//GEN-END:variables

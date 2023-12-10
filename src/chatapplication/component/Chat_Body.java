@@ -1,39 +1,60 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JPanel.java to edit this template
- */
+
 package chatapplication.component;
 
 import net.miginfocom.swing.MigLayout;
 import chatapplication.swing.ScrollBar;
+import javax.swing.Icon;
 import javax.swing.JLabel;
 
 public final class Chat_Body extends javax.swing.JPanel {
 
-    public Chat_Body() {
+    Chat_Item item1 = new Chat_Item();
+    public Chat_Body(){
         initComponents();
-        init();
-        
+        init();  
     }
+
     private void init(){
         body.setLayout(new MigLayout("fillx"));
         sp.setVerticalScrollBar(new ScrollBar());
     }
-    public void addItemLeft(String text){
+    public void addItemLeft(String text, Icon ...image){
         Chat_Left item = new Chat_Left();
         item.setText(text);
+        item.setImage(image);
         body.add(item, "wrap, w ::80%");
         body.repaint();
         body.revalidate();
         
     }
-    public void addItemRight(String text){
+    public void addItemRight(String text, Icon ...image){
         Chat_Right item = new Chat_Right();
         item.setText(text);
+        item.setImage(image);
         body.add(item, "wrap, al right, w ::80%");
         body.repaint();
         body.revalidate();
         
+    }    
+     // Phương thức để xóa nội dung của Chat_Body
+    public void clear() {
+        body.removeAll();
+        body.repaint();
+        body.revalidate();
+    }
+     // Phương thức để đặt nội dung của Chat_Body từ một chuỗi
+    public void setText(String text) {
+        clear(); // Xóa nội dung hiện tại
+        // Tạo một label để hiển thị nội dung mới
+        JLabel messageLabel = new JLabel(text);
+        body.add(messageLabel, "wrap, w ::80%");
+        body.repaint();
+        body.revalidate();
+    }
+    
+    public Chat_Item getchat(){
+        
+        return item1;
     }
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents

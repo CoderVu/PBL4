@@ -10,7 +10,16 @@
     <orderEntry type="module-library" exported="">
       <library>
         <CLASSES>
-          <root url="jar://F:/mysql-connector-java-5.1.48.jar!/" />
+          <root url="jar://E:/JDBCC/miglayout-4.0-swing.jar!/" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES />
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library" exported="">
+      <library>
+        <CLASSES>
+          <root url="jar://E:/JDBC/mysql-connector-java-5.1.48.jar!/" />
         </CLASSES>
         <JAVADOC />
         <SOURCES />

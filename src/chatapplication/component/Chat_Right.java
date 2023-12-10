@@ -2,6 +2,7 @@
 package chatapplication.component;
 
 import java.awt.Color;
+import javax.swing.Icon;
 
 public class Chat_Right extends javax.swing.JLayeredPane {
 
@@ -11,6 +12,10 @@ public class Chat_Right extends javax.swing.JLayeredPane {
     }
     public void setText(String text){
         txt.setText(text);
+    }
+    
+    public void setImage(Icon... image){
+        txt.setImage(true, image);
     }
 
     @SuppressWarnings("unchecked")
@@ -29,7 +34,7 @@ public class Chat_Right extends javax.swing.JLayeredPane {
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addComponent(txt, javax.swing.GroupLayout.PREFERRED_SIZE, 217, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(txt, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(0, 0, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(

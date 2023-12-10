@@ -24,9 +24,9 @@ public class DatabaseManager {
     public User user;
 
     public DatabaseManager(String database, String username, String password) throws SQLException{
-        connection = (Connection) DriverManager.getConnection("jdbc:mysql://172.20.10.2:3306/"+database+"?user="+username+"&password="
+        connection = (Connection) DriverManager.getConnection("jdbc:mysql://192.168.2.22/"+database+"?user="+username+"&password="
                 +password);
-        wrapper = new SQLWrapper();;
+        wrapper = new SQLWrapper();
         System.out.println("Kết nối database thành công");
 
     }
@@ -35,7 +35,7 @@ public class DatabaseManager {
         return  (PreparedStatement) connection.prepareStatement(wrapper.select(columns)
                 .from(database).where(where).getQuery());
     }
-    public Connection getConnection() {
+    public Connection getConnection(){ 
         return connection;
     }
     
@@ -59,5 +59,7 @@ public class DatabaseManager {
     public User getUser(){
         return this.user;
     }
+
+   
 }   
 

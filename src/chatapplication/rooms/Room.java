@@ -12,16 +12,27 @@
      * @author root
      */
     public class Room {
+        private int idroom;
         private String room;
+        private int slt;
         private ArrayList<String> users;
         private StringBuilder chat;
 
-        public Room(String room){
+        public Room(int slt, int idroom, String room){
+            this.idroom = idroom;
             this.room = room;
+            this.slt = slt;
             users = new ArrayList<>();
             chat = new StringBuilder();
         }
-
+        
+        public int getsltRoom(){
+            return slt;
+        }
+        
+        public int getIdROom(){
+            return idroom;
+        }
         public String getRoom() {
             return room;
         }
@@ -41,6 +52,16 @@
 
         public void setUsers(ArrayList<String> users) {
             this.users = users;
+        }
+        
+        public void addUser(String username) {
+            if (!users.contains(username)) {
+                users.add(username);
+            }
+        }
+
+        public void removeUser(String username) {
+            users.remove(username);
         }
 
 

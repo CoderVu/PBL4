@@ -9,6 +9,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 public class ChatManager {
+
     private List<ChatHandler> friendListChat;
 
     public ChatManager() {
@@ -38,14 +39,16 @@ public class ChatManager {
         }
         return null; // Handle index out of bounds gracefully
     }
-public ChatHandler getFriendChatByUser(String user) {
-    for (ChatHandler handler : friendListChat) {
-        if (handler.getUsername().equals(user)) {
-            return handler;
+
+    public ChatHandler getFriendChatByUser(String user) {
+        for (ChatHandler handler : friendListChat) {
+            if (handler.getUsername().equals(user)) {
+                return handler;
+            }
         }
+        return null; // Trả về null nếu không tìm thấy
     }
-    return null; // Trả về null nếu không tìm thấy
-}
+
     public void addMessageToChat(int index, String text) {
         ChatHandler chatHandler = getFriendChatAt(index);
         if (chatHandler != null) {

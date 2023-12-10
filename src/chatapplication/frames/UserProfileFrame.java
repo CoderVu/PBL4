@@ -6,7 +6,6 @@
 package chatapplication.frames;
 
 import chatapplication.database_connection.DatabaseManager;
-import chatapplication.main.Frame;
 import com.mysql.jdbc.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;

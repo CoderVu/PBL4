@@ -12,16 +12,16 @@ package chatapplication.connection;
 public class UserClient {
     
     private String username;
-    private Client client;
+    private ClientHandler clientHandler;
     
-    public UserClient(String username, Client client){
+    public UserClient(String username, ClientHandler clientHandler){
         this.username = username;
-        this.client = client;
+        this.clientHandler = clientHandler;
     }
     public String getUsername(){
         return username;
     }
-    public Client getClient(){
-        return client;
+    public ClientHandler getClient(){
+        return clientHandler;
     }
 }

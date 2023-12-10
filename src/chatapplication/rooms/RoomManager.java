@@ -12,24 +12,52 @@ import java.util.ArrayList;
  * @author root
  */
 public class RoomManager {
+
     private ArrayList<Room> rooms;
-    
-    public RoomManager(){
+
+    public RoomManager() {
         rooms = new ArrayList<>();
     }
-    public Room getRoomByName(String name){
-        for(Room room:rooms){
-            if(name.equalsIgnoreCase(room.getRoom())){
+
+    public Room getRoomBySlt(int select) {
+        for (Room room : rooms) {
+            if (select == room.getsltRoom()) {
                 return room;
             }
         }
         return null;
     }
-    public void addRoom(String roomName){
-        rooms.add(new Room(roomName));
+    
+    public Room getRoomById(int id) {
+        for (Room room : rooms) {
+            if (id == room.getIdROom()) {
+                return room;
+            }
+        }
+        return null;
     }
+
+    public void addRoom(int slt, int idroom, String roomName) {
+        rooms.add(new Room(slt, idroom, roomName));
+    }
+
     public ArrayList<Room> getRooms() {
         return rooms;
     }
-    
+    // Existing methods to add, get, and find rooms.
+
+//    public void userJoinRoom(String roomName, String username) {
+//        Room room = getRoomByName(roomName);
+//        if (room != null) {
+//            room.addUser(username);
+//        }
+//    }
+
+    public void userLeaveRoom(String roomName, String username) {
+//        Room room = getRoomByName(roomName);
+//        if (room != null) {
+//            room.removeUser(username);
+//        }
+    }
+
 }
